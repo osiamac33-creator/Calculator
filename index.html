@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Type&#8288;-7 Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="calculator" role="group" aria-label="Calculator">
+
+  <div class="casing-top">
+    <span class="brand">TYPE&#8288;-7</span>
+    <span class="texture" aria-hidden="true"></span>
+  </div>
+
+  <div class="display">
+    <div class="display__expression" id="expression">&nbsp;</div>
+    <div class="display__value" id="display" aria-live="polite">0</div>
+  </div>
+
+  <div class="keys">
+    <button class="key key--function" data-action="clear">C</button>
+    <button class="key key--function" data-action="backspace" aria-label="Backspace">⌫</button>
+    <button class="key key--function" data-action="percent">%</button>
+    <button class="key key--operator" data-action="operator" data-operator="÷" aria-label="Divide">÷</button>
+
+    <button class="key key--digit" data-action="digit" data-digit="7">7</button>
+    <button class="key key--digit" data-action="digit" data-digit="8">8</button>
+    <button class="key key--digit" data-action="digit" data-digit="9">9</button>
+    <button class="key key--operator" data-action="operator" data-operator="×" aria-label="Multiply">×</button>
+
+    <button class="key key--digit" data-action="digit" data-digit="4">4</button>
+    <button class="key key--digit" data-action="digit" data-digit="5">5</button>
+    <button class="key key--digit" data-action="digit" data-digit="6">6</button>
+    <button class="key key--operator" data-action="operator" data-operator="−" aria-label="Subtract">−</button>
+
+    <button class="key key--digit" data-action="digit" data-digit="1">1</button>
+    <button class="key key--digit" data-action="digit" data-digit="2">2</button>
+    <button class="key key--digit" data-action="digit" data-digit="3">3</button>
+    <button class="key key--operator" data-action="operator" data-operator="+" aria-label="Add">+</button>
+
+    <button class="key key--digit key--zero" data-action="digit" data-digit="0">0</button>
+    <button class="key key--digit" data-action="decimal" aria-label="Decimal point">.</button>
+    <button class="key key--equals" data-action="equals" aria-label="Equals">=</button>
+  </div>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
