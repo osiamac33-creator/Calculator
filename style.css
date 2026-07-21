@@ -218,6 +218,97 @@ body {
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 
+/* ---------------- AI panel ---------------- */
+
+.ai-panel {
+  margin-top: 14px;
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: var(--radius);
+  padding: 12px;
+}
+
+.ai-panel__label {
+  color: #a39c8e;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.ai-panel__row {
+  display: flex;
+  gap: 8px;
+}
+
+.ai-input {
+  flex: 1;
+  min-width: 0;
+  background: var(--display-bg);
+  color: var(--display-fg);
+  border: none;
+  border-radius: 8px;
+  padding: 0 12px;
+  height: 42px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.ai-input:focus-visible {
+  outline: 2px solid #f3f0e8;
+  outline-offset: 2px;
+}
+
+.ai-input::placeholder {
+  color: var(--display-fg-dim);
+}
+
+.ai-submit {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 8px;
+  background: var(--key-operator-bg);
+  color: var(--key-operator-fg);
+  font-size: 18px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 3px 0 var(--key-operator-shadow);
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+}
+
+.ai-submit:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--key-operator-shadow);
+}
+
+.ai-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.ai-panel__answer {
+  min-height: 18px;
+  margin-top: 10px;
+  color: #d8d4c8;
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.ai-panel__answer.is-loading {
+  color: #a39c8e;
+  font-style: italic;
+}
+
+.ai-panel__answer.is-error {
+  color: #d99a7a;
+}
+
 /* Very short viewports (small phones in landscape, split-screen) */
 @media (max-height: 640px) {
   .display {
