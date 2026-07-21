@@ -4,6 +4,9 @@
   const displayEl = document.getElementById('display');
   const expressionEl = document.getElementById('expression');
   const keysEl = document.querySelector('.keys');
+  const aiInput = document.getElementById('aiInput');
+  const aiSubmit = document.getElementById('aiSubmit');
+  const aiAnswer = document.getElementById('aiAnswer');
 
   const initialState = () => ({
     displayValue: '0',
@@ -244,6 +247,8 @@
   window.addEventListener('keydown', (event) => {
     const key = event.key;
 
+    if (document.activeElement === aiInput) return;
+
     if (/^[0-9]$/.test(key)) {
       inputDigit(key);
       flashKey(`[data-digit="${key}"]`);
@@ -276,6 +281,71 @@
       flashKey('[data-action="percent"]');
     }
   });
+
+  // ---- AI panel: type any question, get it solved automatically ----
+  async function askAI(question) {
+    aiAnswer.classList.remove('is-error');
+    aiAnswer.classList.add('is-loading');
+    aiAnswer.textContent = 'Thinking…';
+    aiSubmit.disabled = true;
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 300,
+          messages: [
+            {
+              role: 'user',
+              content:
+                'You are the brain of a pocket calculator. Solve the problem below. ' +
+                'Reply with ONLY the final answer, plus one short line of working if useful. ' +
+                'Max 2 lines, no markdown, no preamble. Problem: ' + question,
+            },
+          ],
+        }),
+      });
+
+      if (!response.ok) throw new Error('Request failed: ' + response.status);
+
+      const data = await response.json();
+      const text = (data.content || [])
+        .filter((item) => item.type === 'text')
+        .map((item) => item.text)
+        .join('\n')
+        .trim();
+
+      aiAnswer.classList.remove('is-loading');
+      aiAnswer.textContent = text || 'No answer returned.';
+      playSound('equals');
+    } catch (err) {
+      aiAnswer.classList.remove('is-loading');
+      aiAnswer.classList.add('is-error');
+      aiAnswer.textContent = 'Could not reach the AI right now. This feature needs the page to be running inside Claude.';
+      playSound('clear');
+    } finally {
+      aiSubmit.disabled = false;
+    }
+  }
+
+  function submitAiQuestion() {
+    const question = aiInput.value.trim();
+    if (!question) return;
+    playSound('operator');
+    askAI(question);
+  }
+
+  if (aiSubmit && aiInput) {
+    aiSubmit.addEventListener('click', submitAiQuestion);
+    aiInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        submitAiQuestion();
+      }
+    });
+  }
 
   updateDisplay();
 })();
