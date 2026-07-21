@@ -40,22 +40,29 @@ html, body {
   height: 100%;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: radial-gradient(circle at 50% 20%, #34302b 0%, #201d1a 70%);
   font-family: 'JetBrains Mono', ui-monospace, monospace;
-  padding: 24px;
+  padding: 16px;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  overflow-x: hidden;
 }
 
 .calculator {
-  width: 320px;
+  width: min(320px, 100%);
   background: var(--casing);
   border-radius: 22px;
-  padding: 18px 16px 22px;
+  padding: clamp(14px, 4vw, 18px) clamp(12px, 3.5vw, 16px) clamp(16px, 4.5vw, 22px);
   box-shadow:
     0 24px 48px -16px rgba(0, 0, 0, 0.55),
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
@@ -116,7 +123,7 @@ body {
 
 .display__value {
   color: var(--display-fg);
-  font-size: 40px;
+  font-size: clamp(28px, 9vw, 40px);
   font-weight: 700;
   line-height: 1.15;
   font-variant-numeric: tabular-nums;
@@ -125,11 +132,11 @@ body {
 }
 
 .display__value.is-long {
-  font-size: 30px;
+  font-size: clamp(22px, 7vw, 30px);
 }
 
 .display__value.is-longer {
-  font-size: 23px;
+  font-size: clamp(17px, 5.5vw, 23px);
 }
 
 /* ---------------- Keys ---------------- */
@@ -137,18 +144,21 @@ body {
 .keys {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  gap: clamp(7px, 2vw, 10px);
 }
 
 .key {
   appearance: none;
   border: none;
   font-family: inherit;
-  font-size: 18px;
+  font-size: clamp(15px, 4vw, 18px);
   font-weight: 600;
-  height: 58px;
+  height: clamp(46px, 13vw, 58px);
   border-radius: var(--radius);
   cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
   transition: transform 0.06s ease, box-shadow 0.06s ease;
 }
 
@@ -182,7 +192,7 @@ body {
 .key--operator {
   background: var(--key-operator-bg);
   color: var(--key-operator-fg);
-  font-size: 20px;
+  font-size: clamp(17px, 4.5vw, 20px);
   box-shadow: 0 3px 0 var(--key-operator-shadow);
 }
 .key--operator:active {
@@ -192,7 +202,7 @@ body {
 .key--equals {
   background: var(--key-equals-bg);
   color: var(--key-equals-fg);
-  font-size: 20px;
+  font-size: clamp(17px, 4.5vw, 20px);
   box-shadow: 0 3px 0 var(--key-equals-shadow);
 }
 .key--equals:active {
@@ -208,16 +218,20 @@ body {
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 
-@media (max-width: 360px) {
-  .calculator {
-    width: 100%;
+/* Very short viewports (small phones in landscape, split-screen) */
+@media (max-height: 640px) {
+  .display {
+    padding: 10px 14px 10px;
+    margin-bottom: 10px;
   }
-  .display__value {
-    font-size: 34px;
+  .casing-top {
+    padding-bottom: 8px;
+  }
+  .keys {
+    gap: 6px;
   }
   .key {
-    height: 52px;
-    font-size: 16px;
+    height: clamp(40px, 10vh, 52px);
   }
 }
 
