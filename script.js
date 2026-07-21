@@ -18,6 +18,39 @@
 
   const MAX_DIGITS = 14;
 
+  // ---- Sound engine: short synthesised beeps, no audio files needed ----
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  const audioCtx = AudioCtx ? new AudioCtx() : null;
+
+  const TONES = {
+    digit: { freq: 480, duration: 0.045, type: 'sine', volume: 0.05 },
+    operator: { freq: 600, duration: 0.05, type: 'square', volume: 0.03 },
+    equals: { freq: 780, duration: 0.09, type: 'sine', volume: 0.06 },
+    clear: { freq: 260, duration: 0.09, type: 'sawtooth', volume: 0.04 },
+    backspace: { freq: 340, duration: 0.04, type: 'square', volume: 0.03 },
+  };
+
+  function playSound(name) {
+    if (!audioCtx) return;
+    const tone = TONES[name];
+    if (!tone) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    const now = audioCtx.currentTime;
+
+    oscillator.type = tone.type;
+    oscillator.frequency.setValueAtTime(tone.freq, now);
+    gainNode.gain.setValueAtTime(tone.volume, now);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + tone.duration);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    oscillator.start(now);
+    oscillator.stop(now + tone.duration);
+  }
+
   function formatNumber(num) {
     if (!isFinite(num)) return 'Error';
     let rounded = Math.round((num + Number.EPSILON) * 1e10) / 1e10;
@@ -59,6 +92,7 @@
   }
 
   function inputDigit(digit) {
+    playSound('digit');
     resetIfError();
     if (state.justEvaluated) {
       state.expressionValue = '';
@@ -75,6 +109,7 @@
   }
 
   function inputDecimal() {
+    playSound('digit');
     resetIfError();
     if (state.justEvaluated) {
       state.expressionValue = '';
@@ -93,6 +128,7 @@
   }
 
   function handleOperator(nextOperator) {
+    playSound('operator');
     resetIfError();
     const inputValue = parseFloat(state.displayValue);
     state.justEvaluated = false;
@@ -119,6 +155,7 @@
   }
 
   function handleEquals() {
+    playSound('equals');
     resetIfError();
     if (state.operator === null || state.waitingForSecondOperand) return;
 
@@ -135,6 +172,7 @@
   }
 
   function handlePercent() {
+    playSound('operator');
     resetIfError();
     const current = parseFloat(state.displayValue);
     let percentValue;
@@ -149,6 +187,7 @@
   }
 
   function handleBackspace() {
+    playSound('backspace');
     resetIfError();
     if (state.waitingForSecondOperand || state.justEvaluated) return;
     if (state.displayValue.length <= 1 || (state.displayValue.length === 2 && state.displayValue.startsWith('-'))) {
@@ -160,6 +199,7 @@
   }
 
   function handleClear() {
+    playSound('clear');
     state = initialState();
     updateDisplay();
   }
