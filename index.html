@@ -49,6 +49,22 @@
     <button class="key key--equals" data-action="equals" aria-label="Equals">=</button>
   </div>
 
+  <div class="ai-panel">
+    <div class="ai-panel__label">Ask AI</div>
+    <div class="ai-panel__row">
+      <input
+        type="text"
+        id="aiInput"
+        class="ai-input"
+        placeholder="e.g. 15% tip on 840, solve 2x+5=17..."
+        autocomplete="off"
+        aria-label="Type a question for AI to solve"
+      />
+      <button id="aiSubmit" class="ai-submit" type="button" aria-label="Get AI answer">→</button>
+    </div>
+    <div class="ai-panel__answer" id="aiAnswer" aria-live="polite"></div>
+  </div>
+
 </main>
 
 <script src="script.js"></script>
